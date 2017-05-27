@@ -90,13 +90,40 @@ class Game extends Component {
             return;
         if (this.state.boardArr[row][col].flagged)
             return;
+        if (this.state.boardArr[row][col].revealed)
+            return;
 
         let boardArrCpy = deepcopy(this.state.boardArr);
         boardArrCpy[row][col].revealed = true;
+
+        //reveal neighbors
+        if (boardArrCpy[row][col].cellValue == 0)
+            boardArrCpy = this.revealNeighbors(boardArrCpy, row, col);
+
         this.setState({boardArr: boardArrCpy});
+
 
         if (this.isMineCell(this.state.boardArr, row, col))
             this.gameOver();
+    }
+
+    revealNeighbors(boardArr, row, col) {
+        if (boardArr[row][col].cellValue > 0)
+            return boardArr;
+        if (!(this.isWithinBounds(row, col)))
+            return boardArr;
+        for (let x = 0; x <= 2; x++) {
+            for (let y = 0; y <= 2; y++) {
+                if (x !== y && this.isWithinBounds((row - 1 + x), (col - 1 + y )) && boardArr[row - 1 + x][col - 1 + y].cellValue >= 0) {
+                    if (!(boardArr[(row - 1 + x)][(col - 1 + y )].revealed)) {
+                        console.log("[" + (row - 1 + x) + "][" + (col - 1 + y) + "]");
+                        boardArr[row - 1 + x][col - 1 + y].revealed = true;
+                        boardArr = this.revealNeighbors(boardArr, (row - 1 + x), ( col - 1 + y));
+                    }
+                }
+            }
+        }
+        return boardArr;
     }
 
     flagCell(row, col) {
@@ -146,8 +173,6 @@ class Game extends Component {
     }
 
     render() {
-        console.log(this.props);
-        console.log(this.state);
         return (
             <div>
                 {JSON.stringify(this.props)} <br /> <br />
@@ -158,17 +183,11 @@ class Game extends Component {
                     onReveal={(row, col) => this.revealCell(row, col)}
                     onFlag={(row, col) => this.flagCell(row, col)}
                 />
-                {/* <table>
-                 {this.state.boardArr.map((row) => <tr style={{height: 20}}>{row.map((cell) => <td
-                 style={{width: 20, color: cell.flagged ? 'red' : 'black'}}> {cell.cellValue}</td>)}</tr>)}
-                 </table>
 
-                 <Cell
-                 text={"F"}
-                 color={"red"}
-                 onClick={(row, col) => this.revealCell(row, col)}
-                 />*/}
-
+                {/*<table>
+                    {this.state.boardArr.map((row) => <tr style={{height: 20}}>{row.map((cell) => <td
+                        style={{width: 20, color: cell.flagged ? 'red' : 'black'}}> {cell.cellValue}</td>)}</tr>)}
+                </table>*/}
             </ div >
         );
     }

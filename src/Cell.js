@@ -16,7 +16,6 @@ class Cell extends Component {
             this.props.onShiftClick();
         }
         else {
-            console.log(this.props);
             this.props.onClick();
         }
     }
