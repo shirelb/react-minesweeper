@@ -40,7 +40,7 @@ class Board extends Component {
 
     render() {
         return (
-            <table>
+            <table style={{userSelect: "none"}}>
                 {this.props.board.map((row, rowIndex)=> {
                     return (<tr key={rowIndex}>{this.renderRow(row, rowIndex)}</tr>);
                 })}

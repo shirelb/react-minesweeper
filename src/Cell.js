@@ -28,7 +28,8 @@ class Cell extends Component {
                 textAlign: 'center',
                 width: 40,
                 height: 40,
-                backgroundColor: this.props.color
+                backgroundColor: this.props.color,
+                borderRadius:'50%'
             }}
                  onClick={this.onClick.bind(this)}>
                 {this.props.text}

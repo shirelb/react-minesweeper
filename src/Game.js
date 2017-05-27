@@ -76,7 +76,7 @@ class Game extends Component {
         let cellVal = 0;
         for (let x = 0; x <= 2; x++)
             for (let y = 0; y <= 2; y++)
-                if (x !== y && this.isWithinBounds((row - 1 + x), (col - 1 + y )) && this.isMineCell(boardArr, row - 1 + x, col - 1 + y))
+                if (this.isWithinBounds((row - 1 + x), (col - 1 + y )) && this.isMineCell(boardArr, (row - 1 + x), (col - 1 + y)))
                     cellVal++;
         return cellVal;
     }
@@ -114,7 +114,7 @@ class Game extends Component {
             return boardArr;
         for (let x = 0; x <= 2; x++) {
             for (let y = 0; y <= 2; y++) {
-                if (x !== y && this.isWithinBounds((row - 1 + x), (col - 1 + y )) && boardArr[row - 1 + x][col - 1 + y].cellValue >= 0) {
+                if (this.isWithinBounds((row - 1 + x), (col - 1 + y )) && boardArr[row - 1 + x][col - 1 + y].cellValue >= 0) {
                     if (!(boardArr[(row - 1 + x)][(col - 1 + y )].revealed)) {
                         console.log("[" + (row - 1 + x) + "][" + (col - 1 + y) + "]");
                         boardArr[row - 1 + x][col - 1 + y].revealed = true;
@@ -158,7 +158,8 @@ class Game extends Component {
             numOfCellFlaggedCorrectly: numOfCellFlaggedCorrectlyCpy
         });
 
-        if (this.state.numOfCellFlaggedCorrectly === this.props.mines)
+
+        if (numOfCellFlaggedCorrectlyCpy === this.props.mines)
             this.gameWinner();
     }
 
@@ -184,10 +185,10 @@ class Game extends Component {
                     onFlag={(row, col) => this.flagCell(row, col)}
                 />
 
-                {/*<table>
-                    {this.state.boardArr.map((row) => <tr style={{height: 20}}>{row.map((cell) => <td
-                        style={{width: 20, color: cell.flagged ? 'red' : 'black'}}> {cell.cellValue}</td>)}</tr>)}
-                </table>*/}
+                <table>
+                 {this.state.boardArr.map((row) => <tr style={{height: 20}}>{row.map((cell) => <td
+                 style={{width: 20, color: cell.flagged ? 'red' : 'black'}}> {cell.cellValue}</td>)}</tr>)}
+                 </table>
             </ div >
         );
     }
