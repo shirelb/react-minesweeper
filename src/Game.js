@@ -5,27 +5,34 @@ import React, {Component} from 'react';
 import deepcopy from 'deepcopy';
 import Board from './Board.js';
 import Cell from './Cell.js';
+import { default as swal } from 'sweetalert2'
 
 class Game extends Component {
     static propTypes = {
         boardHeight: React.PropTypes.number,
         boardWidth: React.PropTypes.number,
-        mines: React.PropTypes.number
-    };
-
-    static defaultProps = {
-        boardHeight: 10,
-        boardWidth: 10,
-        mines: 10
+        mines: React.PropTypes.number,
+        superman: React.PropTypes.bool
     };
 
     componentWillMount() {
         this.startGame();
     }
 
+    componentWillReceiveProps(newProps) {
+        if (newProps.boardHeight != this.props.boardHeight ||
+            newProps.boardWidth != this.props.boardWidth ||
+            newProps.mines != this.props.mines) {
+
+            this.props = newProps;
+            this.startGame();
+        }
+    }
+
     startGame() {
+        let board = this.initBoard();
         this.setState({
-            boardArr: this.initBoard(),
+            boardArr: board,
             status: "PLAYING",
             numOfCellFlagged: 0,
             numOfCellFlaggedCorrectly: 0
@@ -36,7 +43,7 @@ class Game extends Component {
         let boardArr = [];
         for (let i = 0; i < this.props.boardHeight; i++) {
             boardArr.push([]);
-            for (let j = 0; j < this.props.boardHeight; j++) {
+            for (let j = 0; j < this.props.boardWidth; j++) {
                 boardArr[i].push({cellValue: 0, revealed: false, flagged: false});
             }
         }
@@ -53,13 +60,12 @@ class Game extends Component {
                 randomCol = Math.floor(Math.random() * this.props.boardWidth);
             }
 
-            console.log("randomRow  randomCol  " + randomRow + " " + randomCol);
             boardArr[randomRow][randomCol].cellValue = -1;
         }
 
         //calculate rest cells values
         for (let i = 0; i < this.props.boardHeight; i++) {
-            for (let j = 0; j < this.props.boardHeight; j++) {
+            for (let j = 0; j < this.props.boardWidth; j++) {
                 if (!this.isMineCell(boardArr, i, j))
                     boardArr[i][j].cellValue = this.calculateCellValue(boardArr, i, j);
             }
@@ -116,7 +122,6 @@ class Game extends Component {
             for (let y = 0; y <= 2; y++) {
                 if (this.isWithinBounds((row - 1 + x), (col - 1 + y )) && boardArr[row - 1 + x][col - 1 + y].cellValue >= 0) {
                     if (!(boardArr[(row - 1 + x)][(col - 1 + y )].revealed)) {
-                        console.log("[" + (row - 1 + x) + "][" + (col - 1 + y) + "]");
                         boardArr[row - 1 + x][col - 1 + y].revealed = true;
                         boardArr = this.revealNeighbors(boardArr, (row - 1 + x), ( col - 1 + y));
                     }
@@ -148,7 +153,11 @@ class Game extends Component {
                     numOfCellFlaggedCorrectlyCpy++;
             }
             else {
-                //TODO alert this
+                swal(
+                    'PAY ATTENTION!',
+                    'No More Flags !',
+                    'warning'
+                )
             }
         }
 
@@ -165,30 +174,34 @@ class Game extends Component {
 
     gameOver() {
         this.setState({status: "GAME_OVER"});
-        console.log("GAME OVER!");
+        swal(
+            'GAME OVER!',
+            'You LOST!',
+            'error'
+        )
     }
 
     gameWinner() {
         this.setState({status: "GAME_WINNER"});
-        console.log("YOU WON!");
+        swal(
+            'Good job!',
+            'You WIN!',
+            'success'
+        )
     }
 
     render() {
         return (
-            <div>
-                {JSON.stringify(this.props)} <br /> <br />
+            <div style={{display: 'inline-block'}}>
                 Game Status: {this.state.status} <br />
+                Flags Left: {this.props.mines-this.state.numOfCellFlagged} <br />
 
                 <Board
                     board={this.state.boardArr}
                     onReveal={(row, col) => this.revealCell(row, col)}
                     onFlag={(row, col) => this.flagCell(row, col)}
+                    superman={this.props.superman}
                 />
-
-                <table>
-                 {this.state.boardArr.map((row) => <tr style={{height: 20}}>{row.map((cell) => <td
-                 style={{width: 20, color: cell.flagged ? 'red' : 'black'}}> {cell.cellValue}</td>)}</tr>)}
-                 </table>
             </ div >
         );
     }

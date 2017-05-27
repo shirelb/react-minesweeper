@@ -4,9 +4,11 @@
   "version": "0.1.0",
   "repository": "https://github.com/shirelb/react-minesweeper.git",
   "dependencies": {
+    "deepcopy": "^0.6.3",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "deepcopy": "^0.6.3"
+    "react-mdl": "^1.10.3",
+    "sweetalert2": "^6.6.4"
   },
   "devDependencies": {
     "react-scripts": "1.0.6"
