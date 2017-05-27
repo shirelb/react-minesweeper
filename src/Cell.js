@@ -23,13 +23,12 @@ class Cell extends Component {
     render() {
         return (
             <div style={{
-                border: 'solid 1px black',
                 lineHeight: '40px',
                 textAlign: 'center',
                 width: 40,
                 height: 40,
                 backgroundColor: this.props.color,
-                borderRadius:'50%'
+                borderRadius:'50%',
             }}
                  onClick={this.onClick.bind(this)}>
                 {this.props.text}

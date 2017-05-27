@@ -16,16 +16,16 @@ class Board extends Component {
             row.map((cell, cellIndex)=> {
                 let cellColor, cellText;
                 if (cell.revealed) {
-                    cellColor = "#ffffee";
+                    cellColor = "#ffccbc";
                     cell.cellValue === -1 ? cellText = '💣' :
                         cell.cellValue === 0 ? cellText = null :
                             cellText = cell.cellValue.toString();
                 }
                 else if (cell.flagged) {
-                    cellColor = "#cb9b8c";
+                    cellColor = "#ab2639";
                     cellText = '🚩';
                 } else {
-                    cellColor = "#ffccbc";
+                    cellColor = "#c73145";
                     cellText = null;
                 }
                 return (<td key={cellIndex}>
