@@ -4,15 +4,17 @@
 import React, {Component} from 'react';
 import deepcopy from 'deepcopy';
 import Board from './Board.js';
-import Cell from './Cell.js';
-import { default as swal } from 'sweetalert2'
+import SweetAlert from 'sweetalert-react';
+import 'sweetalert/dist/sweetalert.css';
+
 
 class Game extends Component {
     static propTypes = {
         boardHeight: React.PropTypes.number,
         boardWidth: React.PropTypes.number,
         mines: React.PropTypes.number,
-        superman: React.PropTypes.bool
+        superman: React.PropTypes.bool,
+        startNewGame: React.PropTypes.bool
     };
 
     componentWillMount() {
@@ -20,10 +22,7 @@ class Game extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        if (newProps.boardHeight != this.props.boardHeight ||
-            newProps.boardWidth != this.props.boardWidth ||
-            newProps.mines != this.props.mines) {
-
+        if (newProps.startNewGame) {
             this.props = newProps;
             this.startGame();
         }
@@ -35,7 +34,13 @@ class Game extends Component {
             boardArr: board,
             status: "PLAYING",
             numOfCellFlagged: 0,
-            numOfCellFlaggedCorrectly: 0
+            numOfCellFlaggedCorrectly: 0,
+
+            showAlert: false,
+            alertTitle: "GAME OVER!",
+            alertText: "You LOST!",
+            alertType: 'error',
+            alertConfirmButtonText: 'Try Again'
         });
     }
 
@@ -103,11 +108,10 @@ class Game extends Component {
         boardArrCpy[row][col].revealed = true;
 
         //reveal neighbors
-        if (boardArrCpy[row][col].cellValue == 0)
+        if (boardArrCpy[row][col].cellValue === 0)
             boardArrCpy = this.revealNeighbors(boardArrCpy, row, col);
 
         this.setState({boardArr: boardArrCpy});
-
 
         if (this.isMineCell(this.state.boardArr, row, col))
             this.gameOver();
@@ -153,11 +157,13 @@ class Game extends Component {
                     numOfCellFlaggedCorrectlyCpy++;
             }
             else {
-                swal(
-                    'PAY ATTENTION!',
-                    'No More Flags !',
-                    'warning'
-                )
+                this.setState({
+                    showAlert: true,
+                    alertTitle: "PAY ATTENTION!",
+                    alertText: "No More Flags!",
+                    alertType: 'warning',
+                    alertConfirmButtonText: 'Continue'
+                });
             }
         }
 
@@ -167,40 +173,50 @@ class Game extends Component {
             numOfCellFlaggedCorrectly: numOfCellFlaggedCorrectlyCpy
         });
 
-
         if (numOfCellFlaggedCorrectlyCpy === this.props.mines)
             this.gameWinner();
     }
 
     gameOver() {
-        this.setState({status: "GAME_OVER"});
-        swal(
-            'GAME OVER!',
-            'You LOST!',
-            'error'
-        )
+        this.setState({
+            status: "GAME OVER", showAlert: true,
+            alertTitle: "GAME OVER!",
+            alertText: "You LOST!",
+            alertType: 'error',
+            alertConfirmButtonText: 'Try Again'
+        });
     }
 
     gameWinner() {
-        this.setState({status: "GAME_WINNER"});
-        swal(
-            'Good job!',
-            'You WIN!',
-            'success'
-        )
+        this.setState({
+            status: "GAME WINNER", showAlert: true,
+            alertTitle: "You WIN!",
+            alertText: "GOOD JOB!",
+            alertType: 'success',
+            alertConfirmButtonText: 'Another One?'
+        });
     }
 
     render() {
         return (
             <div style={{display: 'inline-block'}}>
                 Game Status: {this.state.status} <br />
-                Flags Left: {this.props.mines-this.state.numOfCellFlagged} <br />
+                Flags Left: {this.props.mines - this.state.numOfCellFlagged} <br />
 
                 <Board
                     board={this.state.boardArr}
                     onReveal={(row, col) => this.revealCell(row, col)}
                     onFlag={(row, col) => this.flagCell(row, col)}
                     superman={this.props.superman}
+                />
+
+                <SweetAlert
+                    show={this.state.showAlert}
+                    title={this.state.alertTitle}
+                    text={this.state.alertText}
+                    type={this.state.alertType}
+                    confirmButtonText={this.state.alertConfirmButtonText}
+                    onConfirm={() => this.setState({showAlert: false})}
                 />
             </ div >
         );
