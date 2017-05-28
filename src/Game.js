@@ -125,7 +125,7 @@ class Game extends Component {
         for (let x = 0; x <= 2; x++) {
             for (let y = 0; y <= 2; y++) {
                 if (this.isWithinBounds((row - 1 + x), (col - 1 + y )) && boardArr[row - 1 + x][col - 1 + y].cellValue >= 0) {
-                    if (!(boardArr[(row - 1 + x)][(col - 1 + y )].revealed)) {
+                    if (!(boardArr[(row - 1 + x)][(col - 1 + y )].revealed) && !(boardArr[(row - 1 + x)][(col - 1 + y )].flagged)) {
                         boardArr[row - 1 + x][col - 1 + y].revealed = true;
                         boardArr = this.revealNeighbors(boardArr, (row - 1 + x), ( col - 1 + y));
                     }

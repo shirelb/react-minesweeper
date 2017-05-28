@@ -23,7 +23,7 @@ class Board extends Component {
                         cell.revealed ?
                             cellColor = "#ffccbc" :
                             cell.flagged ?
-                                cellColor = "#ab2639" :
+                                (cellColor = "#ab2639" ,cellText = '🚩'):
                                 cellColor = "#c73145"
                     }
                     else {
