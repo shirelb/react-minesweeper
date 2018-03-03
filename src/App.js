@@ -58,7 +58,7 @@ class App extends Component {
                 <h1>
                     Welcome To Minesweeper ! =)
                 </h1>
-                <table style={{width: '1000', display: 'inline-block', textAlign: 'center'}}>
+                <table style={{width: '1000px', display: 'inline-block', textAlign: 'center'}}>
                     <tr>
                         <td>
                             <Switch id="Superman" onChange={(e) => this.setSuperman(e.target.checked)}>Superman</Switch>
@@ -66,21 +66,31 @@ class App extends Component {
                     </tr>
                     <tr>
                         <td>
-                            Height {this.state.txtHeight}
-                            <Slider onChange={(e) => this.setBoardHeight(parseInt(e.target.value, 10))} min={5}
-                                    max={300}
-                                    defaultValue={this.state.txtHeight}/>
+                            Height <input type="text" name="txtbHight"
+                                          onChange={(e) => this.setBoardHeight(parseInt(e.target.value, 10))}
+                                          maxLength={3} value={this.state.txtHeight}
+                                          style={{width: '30px' , textAlign: 'center'}} />
+                            <Slider onChange={(e) => this.setBoardHeight(parseInt(e.target.value, 10))}
+                                    min={5} max={300}
+                                    value={this.state.txtHeight}/>
                         </td>
                         <td>
-                            Width {this.state.txtWidth}
-                            <Slider onChange={(e) => this.setBoardWidth(parseInt(e.target.value, 10))} min={5} max={300}
-                                    defaultValue={this.state.txtWidth}/>
+                            Width <input type="text" name="txtbWidth"
+                                          onChange={(e) => this.setBoardHeight(parseInt(e.target.value, 10))}
+                                          maxLength={3} value={this.state.txtWidth}
+                                          style={{width: '30px' , textAlign: 'center'}} />
+                            <Slider onChange={(e) => this.setBoardWidth(parseInt(e.target.value, 10))}
+                                    min={5} max={300}
+                                    value={this.state.txtWidth}/>
                         </td>
                         <td>
-                            Mines {this.state.txtMines}
-                            <Slider onChange={(e) => this.setBoardMines(parseInt(e.target.value, 10))} min={1}
-                                    max={this.state.maxMines}
-                                    defaultValue={this.state.txtMines}/>
+                            Mines <input type="text" name="txtbMines"
+                                          onChange={(e) => this.setBoardHeight(parseInt(e.target.value, 10))}
+                                          maxLength={3} value={this.state.txtMines}
+                                          style={{width: '30px' , textAlign: 'center'}} />
+                            <Slider onChange={(e) => this.setBoardMines(parseInt(e.target.value, 10))}
+                                    min={1} max={this.state.maxMines}
+                                    value={this.state.txtMines}/>
                         </td>
                         <td>
                             <Button raised colored onClick={() => this.restartGame()}>New Game</Button>

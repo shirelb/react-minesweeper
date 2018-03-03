@@ -3,13 +3,14 @@
  */
 import React, {Component} from 'react';
 import Cell from './Cell.js';
+import PropTypes from 'prop-types';
 
 class Board extends Component {
     static propTypes = {
-        board: React.PropTypes.any,
-        onReveal: React.PropTypes.func,
-        onFlag: React.PropTypes.func,
-        superman: React.PropTypes.bool
+        board: PropTypes.any,
+        onReveal: PropTypes.func,
+        onFlag: PropTypes.func,
+        superman: PropTypes.bool
     };
 
     renderRow(row, rowIndex) {

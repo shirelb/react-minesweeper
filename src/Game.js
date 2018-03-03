@@ -6,15 +6,16 @@ import deepcopy from 'deepcopy';
 import Board from './Board.js';
 import SweetAlert from 'sweetalert-react';
 import 'sweetalert/dist/sweetalert.css';
+import PropTypes from 'prop-types';
 
 
 class Game extends Component {
     static propTypes = {
-        boardHeight: React.PropTypes.number,
-        boardWidth: React.PropTypes.number,
-        mines: React.PropTypes.number,
-        superman: React.PropTypes.bool,
-        startNewGame: React.PropTypes.bool
+        boardHeight: PropTypes.number,
+        boardWidth: PropTypes.number,
+        mines: PropTypes.number,
+        superman: PropTypes.bool,
+        startNewGame: PropTypes.bool
     };
 
     componentWillMount() {
