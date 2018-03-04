@@ -15,21 +15,30 @@ class Board extends Component {
 
     renderRow(row, rowIndex) {
         return (
-            row.map((cell, cellIndex)=> {
-                    let cellColor, cellText;
+            row.map((cell, cellIndex) => {
+                    let cellColor, cellCursor, cellText;
                     if (this.props.superman) {
                         cell.cellValue === -1 ? cellText = '💣' :
                             cell.cellValue === 0 ? cellText = null :
                                 cellText = cell.cellValue.toString();
-                        cell.revealed ?
-                            cellColor = "#ffccbc" :
-                            cell.flagged ?
-                                (cellColor = "#ab2639" ,cellText = '🚩'):
+                        if (cell.revealed) {
+                            cellColor = "#ffccbc";
+                            cellCursor = "auto";
+                        }
+                        else {
+                            cellCursor = "pointer";
+                            if (cell.flagged){
+                                cellColor = "#ab2639" ;
+                                cellText = '🚩';
+                            }
+                            else
                                 cellColor = "#c73145"
+                        }
                     }
                     else {
                         if (cell.revealed) {
                             cellColor = "#ffccbc";
+                            cellCursor = "auto";
                             cell.cellValue === -1 ? cellText = '💣' :
                                 cell.cellValue === 0 ? cellText = null :
                                     cellText = cell.cellValue.toString();
@@ -37,15 +46,18 @@ class Board extends Component {
                         else if (cell.flagged) {
                             cellColor = "#ab2639";
                             cellText = '🚩';
+                            cellCursor = "pointer";
                         } else {
                             cellColor = "#c73145";
                             cellText = null;
+                            cellCursor = "pointer";
                         }
                     }
                     return (<td key={cellIndex}>
                         <Cell
                             text={cellText}
                             color={cellColor}
+                            cursor={cellCursor}
                             onClick={() => this.props.onReveal(rowIndex, cellIndex)}
                             onShiftClick={() => this.props.onFlag(rowIndex, cellIndex)}
                         />
@@ -58,9 +70,11 @@ class Board extends Component {
     render() {
         return (
             <table style={{userSelect: "none"}}>
-                {this.props.board.map((row, rowIndex)=> {
+                <tbody>
+                {this.props.board.map((row, rowIndex) => {
                     return (<tr key={rowIndex}>{this.renderRow(row, rowIndex)}</tr>);
                 })}
+                </tbody>
             </table>
         );
     }

@@ -7,6 +7,7 @@ import Board from './Board.js';
 import SweetAlert from 'sweetalert-react';
 import 'sweetalert/dist/sweetalert.css';
 import PropTypes from 'prop-types';
+import { Flex, Box } from 'reflexbox'
 
 
 class Game extends Component {
@@ -200,10 +201,12 @@ class Game extends Component {
 
     render() {
         return (
-            <div style={{display: 'inline-block'}}>
+            <Flex column>
+                <Box w={1/4}>
                 Game Status: {this.state.status} <br />
                 Flags Left: {this.props.mines - this.state.numOfCellFlagged} <br />
-
+                </Box>
+                <Box>
                 <Board
                     board={this.state.boardArr}
                     onReveal={(row, col) => this.revealCell(row, col)}
@@ -219,7 +222,8 @@ class Game extends Component {
                     confirmButtonText={this.state.alertConfirmButtonText}
                     onConfirm={() => this.setState({showAlert: false})}
                 />
-            </ div >
+                </Box>
+            </Flex>
         );
     }
 }

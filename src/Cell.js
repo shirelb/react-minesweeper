@@ -8,6 +8,7 @@ class Cell extends Component {
     static propTypes = {
         text: PropTypes.string,
         color: PropTypes.string,
+        cursor: PropTypes.string,
         onClick: PropTypes.func,
         onShiftClick: PropTypes.func
     };
@@ -23,14 +24,14 @@ class Cell extends Component {
 
     render() {
         return (
-            <div style={{
-                lineHeight: '40px',
-                textAlign: 'center',
-                width: 40,
-                height: 40,
-                backgroundColor: this.props.color,
-                borderRadius:'50%',
-            }}
+            <div style={{ lineHeight: '40px',
+                            textAlign: 'center',
+                            width: 40,
+                            height: 40,
+                            backgroundColor: this.props.color,
+                            borderRadius:'50%',
+                            cursor: this.props.cursor
+                            }}
                  onClick={this.onClick.bind(this)}>
                 {this.props.text}
             </ div >
